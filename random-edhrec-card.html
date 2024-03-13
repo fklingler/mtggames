@@ -1,0 +1,37 @@
+<html>
+<head>
+    
+</head>
+
+<body>
+    <p>EDHREC Rank : <span id="rank"></span></p>
+    <img id="result" />
+</body>
+
+<script>
+    async function loadRandomCardImage() {
+        const rankSpan = document.getElementById('rank');
+        const resultImg = document.getElementById('result');
+
+        const maxEdhcrecRank = 2000;
+        const randomCardRank = Math.floor(Math.random() * maxEdhcrecRank);
+
+        rankSpan.innerText = randomCardRank + 1;
+
+        const resultsPerPage = 175;
+        const indexInPage = randomCardRank % 175;
+        const page = Math.floor(randomCardRank / resultsPerPage);
+
+        const url = `https://api.scryfall.com/cards/search?order=edhrec&q=legal:commander&page=${page}`;
+
+        const response = await fetch(url);
+        const responseJson = await response.json();
+
+        const result = responseJson.data[indexInPage].image_uris.large;
+
+        resultImg.src = result;
+    }
+
+    loadRandomCardImage();
+</script>
+</html>
